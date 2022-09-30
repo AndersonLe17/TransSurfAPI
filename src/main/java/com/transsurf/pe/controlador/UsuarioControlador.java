@@ -60,7 +60,7 @@ public class UsuarioControlador {
                                              @PathVariable(name = "idDocumento") int idDocumento,
                                              @PathVariable(name = "idRol") int idRol){
         if (usuarioRepositorio.existsByNumDoc(usuarioDTO.getNumDoc())) {
-            return new ResponseEntity<>("Ese numero de documento ya existe", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Documento Existente", HttpStatus.BAD_REQUEST);
         }
 
         Documento documento = documentoRepositorio.findById(idDocumento)
@@ -88,7 +88,7 @@ public class UsuarioControlador {
             Usuario usuario = usuarioRepositorio.findById(idUsuario)
                     .orElseThrow(() -> new ResourceNotFoundException("Usuario","idUsuario",idUsuario));
             if (!usuarioDTO.getNumDoc().equals(usuario.getNumDoc())) {
-                return new ResponseEntity<>("Ese numero de documento ya existe", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Documento existente.", HttpStatus.BAD_REQUEST);
             }
         } else if (!usuarioRepositorio.existsById(idUsuario)) {
             return new ResponseEntity<>("El idUsuario no existe", HttpStatus.BAD_REQUEST);

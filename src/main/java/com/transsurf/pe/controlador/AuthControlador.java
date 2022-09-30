@@ -56,7 +56,6 @@ public class AuthControlador {
 
     @PostMapping(value = "/register")
     public ResponseEntity<?> registrarCliente(@RequestBody RegistroDTO registroDTO) {
-        System.out.println("Holas");
         if (usuarioRepositorio.existsByNumDoc(registroDTO.getNumDoc())) {
             return new ResponseEntity<>("Ese numero de documento ya existe", HttpStatus.BAD_REQUEST);
         } else if (usuarioRepositorio.existsByEmail(registroDTO.getEmail())) {
