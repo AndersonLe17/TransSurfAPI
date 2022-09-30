@@ -8,7 +8,7 @@ import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@Getter @Setter
+@Getter @Setter @ToString
 @AllArgsConstructor @NoArgsConstructor
 @Entity
 @Table(name = "usuario")
@@ -20,7 +20,7 @@ public class Usuario {
     @JoinColumn(name = "idDocumento",nullable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Documento documento;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "usuario_rol", joinColumns = @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario"),
     inverseJoinColumns = @JoinColumn(name = "idRol", referencedColumnName = "idRol"))
     private Set<Rol> roles = new HashSet<>();

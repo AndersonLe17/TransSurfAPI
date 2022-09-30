@@ -5,11 +5,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.util.Set;
 
 @Getter @Setter
 @NoArgsConstructor
 public class UsuarioDTO {
     private Long idUsuario;
+    private DocumentoDTO documento;
+    private Set<RolDTO> roles;
     private String numDoc;
     private String nombre;
     private String apellido;

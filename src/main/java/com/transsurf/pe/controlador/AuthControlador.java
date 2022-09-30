@@ -19,10 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 
@@ -53,14 +50,13 @@ public class AuthControlador {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getNumDocOrEmail(),loginDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         String token = jwtTokenProvider.generarToken(authentication);
-
-        return ResponseEntity.ok(new JWTAuthResonseDTO(token));
+        return ResponseEntity.ok(new JWTAuthResonseDTO(token)); 
     }
 
     @PostMapping(value = "/register")
     public ResponseEntity<?> registrarCliente(@RequestBody RegistroDTO registroDTO) {
+        System.out.println("Holas");
         if (usuarioRepositorio.existsByNumDoc(registroDTO.getNumDoc())) {
             return new ResponseEntity<>("Ese numero de documento ya existe", HttpStatus.BAD_REQUEST);
         } else if (usuarioRepositorio.existsByEmail(registroDTO.getEmail())) {

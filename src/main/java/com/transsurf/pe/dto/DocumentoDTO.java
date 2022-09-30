@@ -12,6 +12,6 @@ import java.util.Set;
 public class DocumentoDTO {
     private int idDocumento;
     private String tipo;
-    private Set<Usuario> usuarios;
+    //private Set<Usuario> usuarios;
 
 }
