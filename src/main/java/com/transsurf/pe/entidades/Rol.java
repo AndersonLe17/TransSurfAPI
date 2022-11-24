@@ -5,10 +5,11 @@ import lombok.*;
 import javax.persistence.*;
 
 @Getter @Setter @ToString
-@AllArgsConstructor @NoArgsConstructor
+@AllArgsConstructor @NoArgsConstructor @RequiredArgsConstructor
 @Entity
 @Table(name = "rol")
 public class Rol {
+    @NonNull
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idRol;
 

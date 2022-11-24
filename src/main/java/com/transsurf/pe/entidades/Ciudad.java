@@ -16,6 +16,8 @@ public class Ciudad {
     private int idCiudad;
     @Column(length = 50,unique = true,nullable = false)
     private String nombre;
+    @Column(nullable = false)
+    private String descripcion;
     @Column(length = 15,nullable = false)
     private String estado;
 

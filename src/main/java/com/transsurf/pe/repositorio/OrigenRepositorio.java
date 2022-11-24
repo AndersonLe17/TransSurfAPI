@@ -4,7 +4,7 @@ import com.transsurf.pe.entidades.Ciudad;
 import com.transsurf.pe.entidades.Origen;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OrigenRepositorio extends JpaRepository<Origen, Integer> {
+public interface OrigenRepositorio extends JpaRepository<Origen, Long> {
 
     public void deleteByCiudadIs(Ciudad ciudad);
 

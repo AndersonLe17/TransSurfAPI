@@ -51,7 +51,7 @@ public class AuthControlador {
                 .authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getNumDocOrEmail(),loginDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtTokenProvider.generarToken(authentication);
-        return ResponseEntity.ok(new JWTAuthResonseDTO(token)); 
+        return ResponseEntity.ok(new JWTAuthResonseDTO(token));
     }
 
     @PostMapping(value = "/register")

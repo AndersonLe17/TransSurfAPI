@@ -36,8 +36,8 @@ public class CiudadServicionImp implements CiudadServicio{
 
         Ciudad nuevaCiudad = ciudadRepositorio.save(ciudad);
 
-        Origen origen = origenRepositorio.save(new Origen(nuevaCiudad));
-        Destino destino = destinoRepositorio.save(new Destino(nuevaCiudad));
+        origenRepositorio.save(new Origen(nuevaCiudad));
+        destinoRepositorio.save(new Destino(nuevaCiudad));
 
         CiudadDTO ciudadResponse = mapearDTO(nuevaCiudad);
         return ciudadResponse;
@@ -52,11 +52,8 @@ public class CiudadServicionImp implements CiudadServicio{
 
     @Override
     public CiudadDTO actualizarCiudad(CiudadDTO ciudadDTO, int idCiudad) {
-        Ciudad ciudad = ciudadRepositorio.findById(idCiudad).
-                orElseThrow(() -> new ResourceNotFoundException("Ciudad","idCiudad",idCiudad));
-
-        ciudad.setNombre(ciudadDTO.getNombre());
-        ciudad.setEstado(ciudadDTO.getEstado());
+        Ciudad ciudad = mapearEntidad(ciudadDTO);
+        ciudad.setIdCiudad(idCiudad);
 
         Ciudad ciudadActualizado = ciudadRepositorio.save(ciudad);
 

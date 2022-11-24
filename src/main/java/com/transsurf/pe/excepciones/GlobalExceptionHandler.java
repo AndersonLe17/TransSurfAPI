@@ -26,7 +26,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AppException.class)
     public ResponseEntity<ErrorDetalles> manejarBlogAppException(AppException exception,WebRequest webRequest){
-        ErrorDetalles errorDetalles = new ErrorDetalles(new Date(),exception.getMessage(), webRequest.getDescription(false));
+        ErrorDetalles errorDetalles = new ErrorDetalles(new Date(),exception.getMensaje(), webRequest.getDescription(false));
         return new ResponseEntity<>(errorDetalles,HttpStatus.BAD_REQUEST);
     }
 

@@ -3,12 +3,14 @@ package com.transsurf.pe.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.sql.Date;
 import java.util.Set;
 
 @Getter @Setter
 @NoArgsConstructor
+@ToString
 public class UsuarioDTO {
     private Long idUsuario;
     private DocumentoDTO documento;

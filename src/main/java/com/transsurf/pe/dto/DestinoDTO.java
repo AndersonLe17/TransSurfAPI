@@ -6,9 +6,7 @@ import lombok.Setter;
 
 @Getter @Setter
 @NoArgsConstructor
-public class CiudadDTO {
-    private int idCiudad;
-    private String nombre;
-    private String descripcion;
-    private String estado;
+public class DestinoDTO {
+    private Long idDestino;
+    private CiudadDTO ciudad;
 }

@@ -12,7 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,11 +48,11 @@ public class UsuarioServicioImp implements UsuarioServicio {
     }
 
     @Override
-    public UsuarioDTO crearUsuarioPersonal(UsuarioDTO usuarioDTO, Documento documento, Rol rol) {
+    public UsuarioDTO crearUsuarioPersonal(UsuarioDTO usuarioDTO, Documento documento, Set<Rol> roles) {
         Usuario usuario = mapearEntidad(usuarioDTO);
         usuario.setPassword(passwordEncoder.encode(usuarioDTO.getPassword()));
         usuario.setDocumento(documento);
-        usuario.setRoles(Collections.singleton(rol));
+        usuario.setRoles(roles);
 
         Usuario nuevoUsuario = usuarioRepositorio.save(usuario);
 
@@ -83,7 +85,7 @@ public class UsuarioServicioImp implements UsuarioServicio {
         Usuario usuario = mapearEntidad(usuarioDTO);
         usuario.setPassword(passwordEncoder.encode(usuarioDTO.getPassword()));
         usuario.setDocumento(documento);
-        usuario.setRoles(Collections.singleton(new Rol(2,"ROLE_CLIENT")));
+        usuario.setRoles(Collections.singleton(new Rol(2)));
         usuario.setIdUsuario(idUsuario);
 
         Usuario usuarioActualizado = usuarioRepositorio.save(usuario);
@@ -98,6 +100,43 @@ public class UsuarioServicioImp implements UsuarioServicio {
 
         usuarioRepositorio.delete(usuario);
     }
+
+    @Override
+    public List<UsuarioDTO> listarOperators() {
+        List<Usuario> usuarios = usuarioRepositorio.findAllByRolesIs(new Rol(5));
+        return usuarios.stream().map(usuario -> mapearDTO(usuario)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UsuarioDTO> listarDrivers() {
+        List<Usuario> usuarios = usuarioRepositorio.findAllByRolesIs(new Rol(4));
+        return usuarios.stream().map(usuario -> mapearDTO(usuario)).collect(Collectors.toList());
+    }
+
+    @Override
+    public void actualizarEstado(Usuario usuario, String estado) {
+        usuario.setEstado(estado);
+
+        usuarioRepositorio.save(usuario);
+    }
+
+    @Override
+    public UsuarioDTO modificarCliente(UsuarioDTO usuarioDTO, Documento documento, long idUsuario) {
+        Usuario usuario = usuarioRepositorio.findById(idUsuario).get();
+        usuario.setNombre((usuarioDTO.getNombre() == null)? usuario.getNombre() : usuarioDTO.getNombre());
+        usuario.setApellido((usuarioDTO.getApellido() == null)? usuario.getApellido() : usuarioDTO.getApellido());
+        usuario.setDocumento((documento == null)? usuario.getDocumento() : documento);
+        usuario.setNumDoc((usuarioDTO.getNumDoc() == null)? usuario.getNumDoc() : usuarioDTO.getNumDoc());
+        usuario.setCelular((usuarioDTO.getCelular() == null)? usuario.getCelular() : usuarioDTO.getCelular());
+        usuario.setFechaNacimiento((usuarioDTO.getFechaNacimiento() == null)? usuario.getFechaNacimiento() : usuarioDTO.getFechaNacimiento());
+
+        usuario.setPassword((usuarioDTO.getPassword() == null)? usuario.getPassword() : passwordEncoder.encode(usuarioDTO.getPassword()));
+
+        Usuario usuarioActualizado = usuarioRepositorio.save(usuario);
+
+        return mapearDTO(usuarioActualizado);
+    }
+
 
     //Mapear Entidad a DTO
     private UsuarioDTO mapearDTO(Usuario usuario) {
