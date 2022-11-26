@@ -27,19 +27,14 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/usuario")
 public class UsuarioControlador {
-
     @Autowired
     private UsuarioServicio usuarioServicio;
-
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
-
     @Autowired
     private RolRepositorio rolRepositorio;
-
     @Autowired
     private DocumentoRepositorio documentoRepositorio;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -188,5 +183,14 @@ public class UsuarioControlador {
         usuarioServicio.eliminarUsuario(idUsuario);
 
         return new ResponseEntity<>("Usuario Eliminado con exito",HttpStatus.OK);
+    }
+
+    @GetMapping("/{idDocumento}/{numDoc}")
+    public ResponseEntity<?> buscarClienteByDocumentoAndNumDoc(@PathVariable(name = "idDocumento") int idDocumento, @PathVariable(name = "numDoc") String numDoc) {
+        Documento documento = documentoRepositorio.findById(idDocumento)
+                .orElseThrow(() -> new ResourceNotFoundException("Documento","id",idDocumento));
+
+        UsuarioDTO usuarioDTO = usuarioServicio.buscarClienteByDocumentoAndNumDoc(documento,numDoc);
+        return new ResponseEntity<>(usuarioDTO,HttpStatus.OK);
     }
 }

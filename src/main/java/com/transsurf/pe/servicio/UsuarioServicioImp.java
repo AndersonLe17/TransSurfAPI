@@ -4,10 +4,13 @@ import com.transsurf.pe.dto.UsuarioDTO;
 import com.transsurf.pe.entidades.Documento;
 import com.transsurf.pe.entidades.Rol;
 import com.transsurf.pe.entidades.Usuario;
+import com.transsurf.pe.excepciones.AppException;
 import com.transsurf.pe.excepciones.ResourceNotFoundException;
+import com.transsurf.pe.repositorio.DocumentoRepositorio;
 import com.transsurf.pe.repositorio.UsuarioRepositorio;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,9 @@ public class UsuarioServicioImp implements UsuarioServicio {
     private UsuarioRepositorio usuarioRepositorio;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private DocumentoRepositorio documentoRepositorio;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -135,6 +141,38 @@ public class UsuarioServicioImp implements UsuarioServicio {
         Usuario usuarioActualizado = usuarioRepositorio.save(usuario);
 
         return mapearDTO(usuarioActualizado);
+    }
+
+    @Override
+    public UsuarioDTO buscarClienteByDocumentoAndNumDoc(Documento documento, String numDoc) {
+        Usuario usuario = usuarioRepositorio.findByDocumentoAndNumDoc(documento, numDoc)
+                .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST,"No hay resultado"));
+
+        return mapearDTO(usuario);
+    }
+
+    @Override
+    public Usuario findByDataOrRegister(UsuarioDTO usuarioDTO, int idDocumento, boolean register) {
+        Documento documento = documentoRepositorio.findById(idDocumento).get();
+        Usuario usuario;
+        if (register) {
+            Usuario usuarioBusqueda = usuarioRepositorio.findByDocumentoAndNumDoc(documento,usuarioDTO.getNumDoc())
+                    .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST,"El documento y el numero de documento no pertenecen a un cliente"));
+            usuario = mapearEntidad(modificarCliente(usuarioDTO, null, usuarioBusqueda.getIdUsuario()));
+        } else {
+            usuario = mapearEntidad(usuarioDTO);
+            usuario.setEmail(usuarioRepositorio.existsByEmail(usuarioDTO.getEmail())? null:usuarioDTO.getEmail());
+            usuario.setDocumento(documento);
+            usuario.setEstado("No Registrado");
+
+            usuario = usuarioRepositorio.save(usuario);
+        }
+        return usuario;
+    }
+
+    @Override
+    public Usuario getUsuarioById(long idUsuario) {
+        return usuarioRepositorio.findById(idUsuario).get();
     }
 
 

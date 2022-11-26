@@ -10,8 +10,7 @@ import java.util.Set;
 
 @Getter @Setter @ToString
 @AllArgsConstructor @NoArgsConstructor
-@Entity
-@Table(name = "usuario")
+@Entity @Table(name = "usuario")
 public class Usuario {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,9 +32,9 @@ public class Usuario {
     private String apellido;
     @Column(name = "fechaNacimiento",nullable = false)
     private Date fechaNacimiento;
-    @Column(length = 255,unique = true,nullable = false)
+    @Column(length = 255,unique = true,nullable = true)
     private String email;
-    @Column(length = 255,nullable = false)
+    @Column(length = 255,nullable = true)
     private String password;
     @Column(length = 9,nullable = false)
     private String celular;

@@ -1,5 +1,6 @@
 package com.transsurf.pe.repositorio;
 
+import com.transsurf.pe.entidades.Documento;
 import com.transsurf.pe.entidades.Rol;
 import com.transsurf.pe.entidades.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,5 @@ public interface UsuarioRepositorio extends JpaRepository<Usuario,Long> {
     public List<Usuario> findAllByRolesIs(Rol rol);
     public List<Usuario> findAllByIdUsuarioIn(List<Long> idUsuarios);
 
+    public Optional<Usuario> findByDocumentoAndNumDoc(Documento documento, String numDoc);
 }

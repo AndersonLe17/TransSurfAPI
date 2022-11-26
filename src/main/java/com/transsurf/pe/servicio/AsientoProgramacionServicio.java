@@ -13,4 +13,6 @@ public interface AsientoProgramacionServicio {
     public void actualizarAsientosProgramacion(Programacion programacion, Unidad unidad, boolean sameUnidad);
 
     public List<AsientoProgramacionDTO> obtenerAsientosByProgramacion(Programacion programacion);
+
+    public void actualizarEstadoAsiento(AsientoProgramacion asientoProgramacion, String estado);
 }

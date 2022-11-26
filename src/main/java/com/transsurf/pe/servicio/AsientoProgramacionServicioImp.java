@@ -51,6 +51,12 @@ public class AsientoProgramacionServicioImp implements AsientoProgramacionServic
         return asientoProgramacions.stream().map(asientoProgramacion -> mapearDTO(asientoProgramacion)).collect(Collectors.toList());
     }
 
+    @Override
+    public void actualizarEstadoAsiento(AsientoProgramacion asientoProgramacion, String estado) {
+        asientoProgramacion.setEstado(estado);
+        asientoProgramacionRepositorio.save(asientoProgramacion);
+    }
+
     private AsientoProgramacionDTO mapearDTO(AsientoProgramacion asientoProgramacion) {
         AsientoProgramacionDTO asientoProgramacionDTO = modelMapper.map(asientoProgramacion, AsientoProgramacionDTO.class);
         return asientoProgramacionDTO;

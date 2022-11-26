@@ -33,4 +33,10 @@ public interface UsuarioServicio {
     public void actualizarEstado(Usuario usuario, String estado);
 
     public UsuarioDTO modificarCliente(UsuarioDTO usuarioDTO, Documento documento, long idUsuario);
+
+    public UsuarioDTO buscarClienteByDocumentoAndNumDoc(Documento documento, String numDoc);
+
+    public Usuario findByDataOrRegister(UsuarioDTO usuarioDTO, int idDocumento, boolean register);
+
+    public Usuario getUsuarioById(long idUsuario);
 }
