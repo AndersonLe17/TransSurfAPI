@@ -47,6 +47,12 @@ public class ProgramacionControlador {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/activo")
+    public List<ProgramacionDTO> listarProgramacionesActivas() {
+        return programacionServicio.obtenerProgramacionesActivas();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{idUnidad}/{idOrigen}/{idDestino}/{idUsuarios}")
     public ResponseEntity<?> guardarProgramacion(@RequestBody ProgramacionDTO programacionDTO, @PathVariable(name = "idUnidad") int idUnidad,
                                                  @PathVariable(name = "idOrigen") Long idOrigen, @PathVariable(name = "idDestino") Long idDestino,
@@ -102,6 +108,12 @@ public class ProgramacionControlador {
                 orElseThrow(() -> new ResourceNotFoundException("Destino","id",codDestino));
 
         return new ResponseEntity<>(programacionServicio.obtenerProgramacionesByOrigenAndDestinoAndFecha(origen, destino, fechaIda),HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/state/{idProgramacion}")
+    public ResponseEntity<?> updateStateProgramacion(@PathVariable(name = "idProgramacion") int idProgramacion) {
+        return new ResponseEntity<>(programacionServicio.actualizarEstadoProgramacion(idProgramacion), HttpStatus.OK);
     }
 
 }

@@ -21,4 +21,8 @@ public interface ProgramacionServicio {
     public void eliminarProgramacion(int idProgramacion);
 
     public List<ProgramacionDTO> obtenerProgramacionesByOrigenAndDestinoAndFecha(Origen origen, Destino destino, Date fechaIda);
+
+    public ProgramacionDTO actualizarEstadoProgramacion(int idProgramacion);
+
+    public List<ProgramacionDTO> obtenerProgramacionesActivas();
 }

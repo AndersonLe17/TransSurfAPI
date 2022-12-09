@@ -13,4 +13,6 @@ public interface TripulacionServicio {
     public List<TripulacionDTO> getTripuacionByProgramacion(Programacion programacion);
 
     public void eliminarTripulacionByProgramacion(Programacion oldProgramacion);
+
+    public void actualizarEstado(Programacion programacion, String estado);
 }

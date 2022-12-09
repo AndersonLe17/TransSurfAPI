@@ -4,6 +4,7 @@ import com.transsurf.pe.dto.ReservaDTO;
 import com.transsurf.pe.entidades.AsientoProgramacion;
 import com.transsurf.pe.entidades.Reserva;
 import com.transsurf.pe.entidades.Usuario;
+import com.transsurf.pe.excepciones.ResourceNotFoundException;
 import com.transsurf.pe.repositorio.ReservaRepositorio;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,26 @@ public class ReservaServicioImp implements ReservaServicio{
     @Override
     public List<ReservaDTO> listarReservasByUsuario(Usuario usuario) {
         List<Reserva> reservas = reservaRepositorio.findAllByUsuario(usuario);
+        return reservas.stream().map(reserva -> mapearDTO(reserva)).collect(Collectors.toList());
+    }
+
+    @Override
+    public ReservaDTO getReservaById(Long idReserva) {
+        Reserva reserva = reservaRepositorio.findById(idReserva)
+                .orElseThrow((() -> new ResourceNotFoundException("Reserva","idReserva", idReserva)));
+        return mapearDTO(reserva);
+    }
+
+    @Override
+    public ReservaDTO getReservaByasientoProgramacion(AsientoProgramacion asientoProgramacion) {
+        Reserva reserva = reservaRepositorio.findByAsientoProgramacion(asientoProgramacion);
+
+        return mapearDTO(reserva);
+    }
+
+    @Override
+    public List<ReservaDTO> listarReservasByAsientosProgramacions(List<AsientoProgramacion> asientoProgramacions) {
+        List<Reserva> reservas = reservaRepositorio.findAllByAsientoProgramacionIn(asientoProgramacions);
         return reservas.stream().map(reserva -> mapearDTO(reserva)).collect(Collectors.toList());
     }
 

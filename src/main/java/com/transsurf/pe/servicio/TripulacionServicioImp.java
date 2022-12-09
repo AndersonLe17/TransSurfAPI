@@ -52,6 +52,13 @@ public class TripulacionServicioImp implements TripulacionServicio{
         tripulacionRepositorio.deleteAll(tripulacions);
     }
 
+    @Override
+    public void actualizarEstado(Programacion programacion, String estado) {
+        List<Tripulacion> tripulacions = tripulacionRepositorio.findAllByProgramacion(programacion);
+        usuarioServicio.actualizarEstado(tripulacions.get(0).getUsuario(), estado);
+        usuarioServicio.actualizarEstado(tripulacions.get(1).getUsuario(), estado);
+    }
+
     // Convierte entidad a DTO
     private TripulacionDTO mapearDTO(Tripulacion tripulacion) {
         TripulacionDTO tripulacionDTO = modelMapper.map(tripulacion, TripulacionDTO.class);

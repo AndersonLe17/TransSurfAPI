@@ -88,7 +88,36 @@ public class ProgramacionServicioImp implements ProgramacionServicio{
 
     @Override
     public List<ProgramacionDTO> obtenerProgramacionesByOrigenAndDestinoAndFecha(Origen origen, Destino destino, Date fechaIda) {
-        List<Programacion> programacions = programacionRepositorio.findAllByOrigenAndDestinoAndFecha(origen,destino,fechaIda);
+        List<Programacion> programacions = programacionRepositorio.findAllByOrigenAndDestinoAndFechaAndEstado(origen,destino,fechaIda, "Activo");
+        return programacions.stream().map(programacion -> mapearDTO(programacion)).collect(Collectors.toList());
+    }
+
+    @Override
+    public ProgramacionDTO actualizarEstadoProgramacion(int idProgramacion) {
+        Programacion programacion = programacionRepositorio.findById(idProgramacion).get();
+
+        String newEstado = "";
+        switch (programacion.getEstado()) {
+            case "Activo":
+                newEstado = "En Curso";
+                break;
+            case "En Curso":
+                newEstado = "Finalizado";
+                unidadServicio.actualizarEstado(programacion.getUnidad(), "Activo");
+                tripulacionServicio.actualizarEstado(programacion, "Activo");
+                break;
+        }
+
+        programacion.setEstado(newEstado);
+
+        Programacion programacionResponse = programacionRepositorio.save(programacion);
+
+        return mapearDTO(programacionResponse);
+    }
+
+    @Override
+    public List<ProgramacionDTO> obtenerProgramacionesActivas() {
+        List<Programacion> programacions = programacionRepositorio.findAllByEstadoOrEstadoIs("Activo", "Inactivo");
         return programacions.stream().map(programacion -> mapearDTO(programacion)).collect(Collectors.toList());
     }
 
